@@ -66,7 +66,7 @@ $(FLAGS_DIR)/%.png: $(FLAGS_SRC_DIR)/%.png ./waveflag "$(PNGQUANT)"
 	mkdir -p $(FLAGS_DIR)
 	./waveflag "$<" "$@"
 	optipng -quiet -o7 "$@"
-	"$(PNGQUANT)" $(PNGQUANTFLAGS) "$@"
+	"$(PNGQUANT)" $(PNGQUANTFLAGS) "$@" || true
 
 flag-symlinks: $(WAVED_FLAGS)
 	$(subst ^, ,                                \
@@ -92,6 +92,7 @@ PUA_ADDER = map_pua_emoji.py
 	ttx "$<"
 
 $(EMOJI).ttf: $(EMOJI).tmpl.ttf $(EMOJI_BUILDER) $(PUA_ADDER) $(EMOJI_PNG128)*.png flag-symlinks
+	mogrify -resize '12x12^' $(EMOJI_PNG128)*.png
 	python $(EMOJI_BUILDER) -V $< "$@" $(EMOJI_PNG128)
 	python $(PUA_ADDER) "$@" "$@-with-pua"
 	mv "$@-with-pua" "$@"

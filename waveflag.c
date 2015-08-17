@@ -25,7 +25,7 @@
 
 
 #define SCALE 8
-#define SIZE 128
+#define SIZE 12
 #define MARGIN (debug ? 24 : 0)
 
 static unsigned int debug;
